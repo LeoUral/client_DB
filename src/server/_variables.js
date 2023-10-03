@@ -1,0 +1,5 @@
+export const URL = 'http://localhost:'
+export const PORT = '3030'
+export const TOKEN = '0b1e33b7-6eed-4da6-b8ae-18386166fb3e'
+export const PASSWORD = '12345'
+export const EMAIL = 'abc@mail.ru'
