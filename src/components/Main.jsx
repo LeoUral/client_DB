@@ -10,6 +10,8 @@ class Main extends React.Component {
             text: '',
             number: 0,
             result: {},
+            collection: 'logger',
+            idDocument: 'test',
         }
         this.readData = this.readData.bind(this);
         this.handleChangeText = this.handleChangeText.bind(this);
@@ -25,6 +27,8 @@ class Main extends React.Component {
                     number: this.state.number,
                 }
                 console.log(`SAVE:::: `, saveObj); // test
+                console.log(`String::: `, this.state.text, typeof (this.state.text)); // test
+                console.log(`NUM::: `, this.state.number, typeof (this.state.number)); // test
 
                 await Server.create(saveObj)
 
@@ -40,20 +44,20 @@ class Main extends React.Component {
     }
 
     handleChangeNumber(e) {
-        this.setState({ number: e.target.value })
+        this.setState({ number: Number(e.target.value) }) // * тип переменной указывается до сохранения
     }
-
 
     async readData() {
         try {
             console.log(`run readData()`);
-            const result = await Server.read()
+            const result = await Server.read(this.state.collection, this.state.idDocument)
             this.setState({ result: result })
             this.setState({ text: result.text, number: result.number })
             setTimeout(() => {
                 console.log(`result: `, result)
                 console.log(`NAME: `, result.text);
                 console.log(`Number: `, result.number);
+                console.log(Object.keys(this.state.result));
             }, 2000)
         } catch (err) {
             console.log(`Ошибка при обращении к Server: `, err);
@@ -101,6 +105,41 @@ class Main extends React.Component {
                     >
                         SAVE
                     </button>
+                </div>
+                <div
+                    style={{ padding: '10px' }}
+                >
+                    Отображение документа:
+                    <div
+                        style={{ padding: '10px' }}
+                    >
+                        <div>
+                            <span> <b> _id: {`"${this.state.idDocument}"`} </b> </span>
+                        </div>
+                        <div>
+                            <span>   {`{`} </span>
+                            {
+                                Object.keys(this.state.result).map(itm => {
+                                    return (
+                                        <div
+                                            key={itm}
+                                            style={{ padding: '0px 0px 0px 15px' }}
+                                        >
+                                            <span> <b> {itm}:</b></span>
+                                            <span
+                                                style={{
+                                                    color: typeof (this.state.result[itm]) === 'number' ? 'blue' : 'green'
+                                                }}
+                                            >
+                                                &nbsp; {this.state.result[itm]}
+                                            </span>
+                                        </div>
+                                    )
+                                })
+                            }
+                            <span>  &nbsp;{`}`} </span>
+                        </div>
+                    </div>
                 </div>
 
             </div>

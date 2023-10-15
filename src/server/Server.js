@@ -11,15 +11,15 @@ class Server {
      * Чтение данных
      * @returns 
      */
-    async read() {
+    async read(collection, idDocument) {
         try {
             const url = `${this.URL}${this.PORT}/api/read/document`
             const userBody = {
                 token: TOKEN,
                 email: EMAIL,
                 password: PASSWORD,
-                collection: 'logger',
-                idDocument: 'test',
+                collection: collection,
+                idDocument: idDocument,
             }
 
             const response = await fetch(url, {
